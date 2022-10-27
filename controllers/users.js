@@ -1,12 +1,12 @@
+const Users = require('../models/users');
+
 const dateTime = require('node-datetime');
 const dt = dateTime.create();
 const formatted = dt.format('Y-m-d H:M:S');
 
-const Users = require('../models/users');
-
 exports.getAllUsers = async (req, res) => {
     try {
-       const users = await Users.find({});
+        const users = await Users.find({});
 
         res.status(200).json({
             page: "1",
@@ -37,6 +37,24 @@ exports.createUser = async (req, res) => {
         console.log(error);
         res.json({
             message: 'Could not create a new user'
+        });
+    }
+}
+
+exports.updateUser = async (req, res) => {
+    try {
+        const { id: userId } = req.params.id
+        const user = await Users.findOneAndUpdate({ _id: userId}, req.body, {
+            new: true,
+        })
+        res.status(200).json({
+            user,
+            updatedAt: formatted
+        });
+    } catch (error) {
+        console.log(error);
+        res.json({
+            message: 'Could not updated user'
         });
     }
 }
