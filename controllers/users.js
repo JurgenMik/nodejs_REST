@@ -58,3 +58,17 @@ exports.updateUser = async (req, res) => {
         });
     }
 }
+
+exports.deleteUser = async (req, res) => {
+    try{
+        const { id: userId } = req.params.id
+        const user = await Users.findOneAndDelete({ _id: userId});
+
+        res.status(204).json({
+            message: 'Deleted user'
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(400);
+    }
+}
