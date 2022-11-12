@@ -9,10 +9,10 @@ exports.getAllUsers = async (req, res) => {
         const users = await Users.find({});
 
         res.status(200).json({
-            page: "1",
-            per_page: "6",
-            total: "12",
-            total_pages: "2",
+            page: 1,
+            per_page: 6,
+            total: 1,
+            total_pages: 2,
             users,
             support: {
                 url: "https//reqres.in/#support-heading",
