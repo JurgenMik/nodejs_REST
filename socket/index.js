@@ -1,7 +1,7 @@
 const { getAllUsers, createUser, updateUser, deleteUser } = require('../controllers/socket');
 
 module.exports = (io) => {
-    io.on('connection', socket => {
+    io.on('connect', socket => {
         console.log(socket.id);
 
         socket.on('get/users', () => getAllUsers(io));
