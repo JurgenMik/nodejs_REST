@@ -12,7 +12,9 @@ module.exports = (io) => {
 
         socket.on('delete/user', (id) => deleteUser(io, id));
 
-        socket.on('disconnect', () => console.log('disconnected'))
-    })
+        io.on('connect_error', (err) => {
+            console.log(`connect_error due to ${err.message}`);
+        });
+    });
 }
 
