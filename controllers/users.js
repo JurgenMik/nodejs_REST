@@ -43,10 +43,10 @@ exports.createUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     try {
-        const { id: userId } = req.params
+        const { id: userId } = req.params;
         const user = await Users.findOneAndUpdate({ _id: userId}, req.body, {
             new: true,
-        })
+        });
 
         res.status(200).json({
             user,
@@ -61,13 +61,11 @@ exports.updateUser = async (req, res) => {
 }
 
 exports.deleteUser = async (req, res) => {
-    try{
-        const { id: userId } = req.params
+    try {
+        const { id: userId } = req.params;
         await Users.findOneAndDelete({ _id: userId});
 
-        res.status(204).json({
-            message: 'Deleted user'
-        });
+        res.status(204);
     } catch (error) {
         console.log(error);
         res.status(400);

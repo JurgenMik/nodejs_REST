@@ -7,17 +7,21 @@ dotenv.config();
 
 const router = express.Router();
 
+/*
 router.get('/jwt', (req, res) => {
     let privateKey = process.env.KEY;
     let token = jwt.sign({ "body" : "secret" },
         privateKey, { algorithm: 'HS256'});
     res.send(token);
 })
-router.get('/users', isAuthenticated, usersController.getAllUsers);
-router.post('/users', isAuthenticated, usersController.createUser);
-router.put('/users/:id', isAuthenticated, usersController.updateUser);
-router.delete('/users/:id', isAuthenticated, usersController.deleteUser);
 
+ */
+router.get('/users', usersController.getAllUsers);
+router.post('/users', usersController.createUser);
+router.put('/users/:id', usersController.updateUser);
+router.delete('/users/:id', usersController.deleteUser);
+
+/*
 function isAuthenticated(req, res, next) {
     if (typeof req.headers.authorization !== "undefined") {
         let token = req.headers.authorization.split(" ")[1];
@@ -34,5 +38,7 @@ function isAuthenticated(req, res, next) {
         throw new Error("Not authorized");
     }
 }
+
+ */
 
 module.exports = router;

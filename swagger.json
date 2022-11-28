@@ -1,0 +1,315 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "REST Users",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3002",
+      "description": ""
+    }
+  ],
+  "paths": {
+    "/api/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {}
+                },
+                "examples": {
+                  "users": {
+                    "value": {
+                      "page": 1,
+                      "per_page": 6,
+                      "total": 1,
+                      "total_pages": 2,
+                      "users": [
+                        {
+                          "_id": "635c21783c1026bb3af74817",
+                          "email": "george.bluth@reqres.in",
+                          "first_name": "George",
+                          "last_name": "Bluth",
+                          "avatar": "https://reqres.in/img/faces/1-image.jpg"
+                        },
+                        {
+                          "_id": "635c219b3c1026bb3af74819",
+                          "email": "janet.weaver@reqres.in",
+                          "first_name": "Janet",
+                          "last_name": "Weaver",
+                          "avatar": "https://reqres.in/img/faces/2-image.jpg"
+                        },
+                        {
+                          "_id": "635c21c13c1026bb3af7481b",
+                          "email": "emma.wong@reqres.in",
+                          "first_name": "Emma",
+                          "last_name": "Wong",
+                          "avatar": "https://reqres.in/img/faces/3-image.jpg"
+                        },
+                        {
+                          "_id": "635c21f53c1026bb3af7481d",
+                          "email": "eve.holt@reqres.in",
+                          "first_name": "Eve",
+                          "last_name": "Holt",
+                          "avatar": "https://reqres.in/img/faces/4-image.jpg"
+                        },
+                        {
+                          "_id": "635c22153c1026bb3af7481f",
+                          "email": "charles.morris@reqres.in",
+                          "first_name": "Charles",
+                          "last_name": "Morris",
+                          "avatar": "https://reqres.in/img/faces/5-image.jpg"
+                        },
+                        {
+                          "_id": "636fb85489f384de5f2d4cf1",
+                          "avatar": "https://reqres.in/img/faces/6-image.jpg",
+                          "email": "tracey.ramos@reqres.in",
+                          "first_name": "Tracey",
+                          "last_name": "Ramos"
+                        },
+                        {
+                          "_id": "637eb4f30823457d2254b595",
+                          "email": "jurgen.mikk@voco.ee",
+                          "first_name": "Jurgen12",
+                          "last_name": "Mikk",
+                          "avatar": "asdasd"
+                        }
+                      ],
+                      "support": {
+                        "url": "https//reqres.in/#support-heading",
+                        "text": "To keep ReqRes free, contributions towards server costs are appreciated!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Server returns an array of `user` entities"
+          },
+          "400": {
+            "description": "Could not get `users`"
+          }
+        },
+        "summary": "Get all users"
+      },
+      "post": {
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/user"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "email": "milyanggong@gmail.com",
+                    "first_name": "Son",
+                    "last_name": "Yil",
+                    "avatar": "assets/profile/son.jpeg"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "user": {
+                    "value": {
+                      "user": {
+                        "email": "milyanggong@gmail.com",
+                        "first_name": "Son",
+                        "last_name": "Yil",
+                        "avatar": "assets/profile/son.jpeg",
+                        "_id": "638503398af66d6130072c4a"
+                      },
+                      "createdAt": "2022-11-28 20:48:10"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Server returns newly created `user` entity with allocated _id of that user & the date-time at which the user was created."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "value": {
+                      "message": "Could not create a new user"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Missing field in .req body"
+          }
+        },
+        "summary": "Create a new user"
+      }
+    },
+    "/api/users/{userId}": {
+      "put": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/user"
+              },
+              "examples": {
+                "user": {
+                  "value": {
+                    "email": "milyanggong@windowslive.com",
+                    "first_name": "Son",
+                    "last_name": "Yil",
+                    "avatar": "assets/profile/son.jpeg"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "tags": [
+          "Users/:id"
+        ],
+        "parameters": [
+          {
+            "examples": {
+              "_id": {
+                "value": "63850b39d521473d31992151"
+              }
+            },
+            "name": "userId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/user"
+                },
+                "examples": {
+                  "user": {
+                    "value": {
+                      "user": {
+                        "_id": "63850b39d521473d31992151",
+                        "email": "milyanggong@windowslive.com",
+                        "first_name": "Son",
+                        "last_name": "Yil",
+                        "avatar": "assets/profile/son.jpeg"
+                      },
+                      "updatedAt": "2022-11-28 21:16:23"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Server returns the updated `user` entity along with date-time at which the user was updated."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "response": {
+                    "value": {
+                      "message": "Could not update user"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Missing correct _id in the URL path or a field in .req body"
+          }
+        },
+        "summary": "Edit user"
+      },
+      "delete": {
+        "tags": [
+          "Users/:id"
+        ],
+        "parameters": [
+          {
+            "examples": {
+              "_id": {
+                "value": "63850b39d521473d31992151"
+              }
+            },
+            "name": "userId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful request"
+          },
+          "400": {
+            "description": "Missing correct _id in the URL path "
+          }
+        },
+        "summary": "Delete user"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "user": {
+        "title": "Root Type for user",
+        "description": "",
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string"
+              },
+              "first_name": {
+                "type": "string"
+              },
+              "last_name": {
+                "type": "string"
+              },
+              "avatar": {
+                "type": "string"
+              },
+              "_id": {
+                "type": "string"
+              }
+            }
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "example": {
+          "email": "milyanggong@gmail.com",
+          "first_name": "Son",
+          "last_name": "Yil",
+          "avatar": "assets/profile/son.jpeg"
+        }
+      }
+    }
+  }
+}

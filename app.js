@@ -2,13 +2,17 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const http = require("http");
-const { Server } = require("socket.io")
+const { Server } = require("socket.io");
 const cors = require("cors");
+const swaggerUI = require('swagger-ui-express');
+const swaggerSpec = require('./swagger.json');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 dotenv.config()
 
 const server = http.createServer(app)
+
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 app.use(cors());
 const io = new Server(server, {
