@@ -35,7 +35,7 @@ exports.createUser = async (req, res) => {
         });
     } catch (error) {
         console.log(error);
-        res.json({
+        res.status(400).json({
             message: 'Could not create a new user'
         });
     }
@@ -43,8 +43,8 @@ exports.createUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     try {
-        const { id: userId } = req.params;
-        const user = await Users.findOneAndUpdate({ _id: userId}, req.body, {
+        const {id: userId} = req.params;
+        const user = await Users.findOneAndUpdate({_id: userId}, req.body, {
             new: true,
         });
 
@@ -54,20 +54,20 @@ exports.updateUser = async (req, res) => {
         });
     } catch (error) {
         console.log(error);
-        res.json({
-            message: 'Could not updated user'
+        res.status(400).json({
+            message: 'Could not update user'
         });
     }
 }
 
 exports.deleteUser = async (req, res) => {
     try {
-        const { id: userId } = req.params;
-        await Users.findOneAndDelete({ _id: userId});
+        const {id: userId} = req.params;
+        await Users.findOneAndDelete({_id: userId});
 
-        res.status(204);
+        return res.status(204).end();
     } catch (error) {
         console.log(error);
-        res.status(400);
+        return res.status(400).send({message: error.message});
     }
 }

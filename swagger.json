@@ -92,9 +92,6 @@
               }
             },
             "description": "Server returns an array of `user` entities"
-          },
-          "400": {
-            "description": "Could not get `users`"
           }
         },
         "summary": "Get all users"
@@ -158,9 +155,14 @@
                 }
               }
             },
-            "description": "Missing field in .req body"
+            "description": "Missing field in request body"
           }
         },
+        "security": [
+          {
+            "auth": []
+          }
+        ],
         "summary": "Create a new user"
       }
     },
@@ -238,9 +240,14 @@
                 }
               }
             },
-            "description": "Missing correct _id in the URL path or a field in .req body"
+            "description": "Missing correct _id in the URL path"
           }
         },
+        "security": [
+          {
+            "auth": []
+          }
+        ],
         "summary": "Edit user"
       },
       "delete": {
@@ -267,6 +274,11 @@
             "description": "Missing correct _id in the URL path "
           }
         },
+        "security": [
+          {
+            "auth": []
+          }
+        ],
         "summary": "Delete user"
       }
     }
@@ -309,6 +321,12 @@
           "last_name": "Yil",
           "avatar": "assets/profile/son.jpeg"
         }
+      }
+    },
+    "securitySchemes": {
+      "auth": {
+        "scheme": "bearer",
+        "type": "http"
       }
     }
   }

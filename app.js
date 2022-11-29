@@ -10,9 +10,7 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 dotenv.config()
 
-const server = http.createServer(app)
-
-app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+const server = http.createServer(app);
 
 app.use(cors());
 const io = new Server(server, {
@@ -34,6 +32,7 @@ mongoose.connection.on('error', err => {
 const userRoutes = require('./routes/users');
 
 app.use(bodyParser.json());
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 app.use("/api", userRoutes);
 
 const port = process.env.PORT || 3002;
