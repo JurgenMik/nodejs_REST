@@ -6,11 +6,17 @@ const { Server } = require("socket.io");
 const cors = require("cors");
 const swaggerUI = require('swagger-ui-express');
 const swaggerSpec = require('./swagger.json');
+const rateLimiter = require('express-rate-limit');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 dotenv.config()
 
 const server = http.createServer(app);
+
+const limiter = rateLimiter({
+    max: 3,
+    windowMs: 10000,
+})
 
 app.use(cors());
 const io = new Server(server, {
@@ -33,7 +39,7 @@ const userRoutes = require('./routes/users');
 
 app.use(bodyParser.json());
 app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
-app.use("/api", userRoutes);
+app.use("/api", limiter, userRoutes);
 
 const port = process.env.PORT || 3002;
 server.listen(3002, () => {
