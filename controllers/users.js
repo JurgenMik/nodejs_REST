@@ -43,6 +43,7 @@ exports.createUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     try {
+        await authorize(req);
         const {id: userId} = req.params;
         const user = await Users.findOneAndUpdate({_id: userId}, req.body, {
             new: true,
@@ -53,21 +54,29 @@ exports.updateUser = async (req, res) => {
             updatedAt: formatted
         });
     } catch (error) {
-        console.log(error);
-        res.status(400).json({
-            message: 'Could not update user'
-        });
+        if (error.kind === 'ObjectId') {return res.status(400).json({message: 'Invalid Id'})}
+        return res.status(403).send();
     }
 }
 
 exports.deleteUser = async (req, res) => {
     try {
+        await authorize(req);
         const {id: userId} = req.params;
         await Users.findOneAndDelete({_id: userId});
 
         return res.status(204).end();
     } catch (error) {
-        console.log(error);
-        return res.status(400).send({message: error.message});
+        if (error.kind === 'ObjectId') {return res.status(400).json({message: 'Invalid Id'})}
+        return res.status(403).send();
     }
+}
+
+async function authorize(req) {
+    const {id: userId} = req.params;
+    const clientToken = req.headers.authorization.split(" ")[1];
+
+    const userObj = await Users.findOne({_id: userId});
+
+    if (userObj.token !== clientToken) {throw new Error()}
 }
