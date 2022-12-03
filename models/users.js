@@ -16,6 +16,10 @@ const usersSchema = new mongoose.Schema({
     avatar: {
         type: String,
         required: true,
+    },
+    token: {
+        type: String,
+        required: true,
     }
 }, {versionKey: false});
 
