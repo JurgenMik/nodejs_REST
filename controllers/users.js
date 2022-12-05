@@ -2,6 +2,7 @@ const Users = require('../models/users');
 
 const dateTime = require('node-datetime');
 const dt = dateTime.create();
+
 const formatted = dt.format('Y-m-d H:M:S');
 
 exports.getAllUsers = async (req, res) => {
