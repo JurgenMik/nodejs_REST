@@ -281,6 +281,87 @@
         ],
         "summary": "Delete user"
       }
+    },
+    "/api/logs": {
+      "get": {
+        "tags": [
+          "Logs"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "logs": {
+                    "value": [
+                      {
+                        "timestamp": "2022-12-05 11:46:40",
+                        "originalUrl": "/api/users/638dd0d7a781596f08c0de67",
+                        "method": "PUT",
+                        "clientId": "94BQr4Ye8U2IVuXGamanT_fVFswDlYgs0bxNiBE-wdg "
+                      },
+                      {
+                        "timestamp": "2022-12-05 12:07:04",
+                        "originalUrl": "/api/users/63866255f001bc58f7e1f7ba",
+                        "method": "PUT",
+                        "clientId": "inIgvDf6v_8y93uXgxD2lQEE-lFVnG-b38y5e46ptuE "
+                      },
+                      {
+                        "timestamp": "2022-12-05 12:07:13",
+                        "originalUrl": "/api/users/63866255f001bc58f7e1f7ba",
+                        "method": "DELETE",
+                        "clientId": "inIgvDf6v_8y93uXgxD2lQEE-lFVnG-b38y5e46ptuE "
+                      },
+                      {
+                        "timestamp": "2022-12-05 12:08:03",
+                        "originalUrl": "/api/users/63866255f001bc58f7e1f7ba",
+                        "method": "PUT",
+                        "clientId": "inIgvDf6v_8y93uXgxD2lQEE-lFVnG-b38y5e46ptuE "
+                      },
+                      {
+                        "timestamp": "2022-12-05 12:08:32",
+                        "originalUrl": "/api/users",
+                        "method": "POST",
+                        "clientId": "inIgvDf6v_8y93uXgxD2lQEE-lFVnG-b38y5e46ptuE "
+                      },
+                      {
+                        "timestamp": "2022-12-05 12:08:47",
+                        "originalUrl": "/api/users/638ddf407561baa83685cc11",
+                        "method": "PUT",
+                        "clientId": "inIgvDf6v_8y93uXgxD2lQEE-lFVnG-b38y5e46ptuE "
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "description": "Server returns an array of `log` entries"
+          }
+        },
+        "summary": "Get all logged requests"
+      }
+    },
+    "/api/jwt": {
+      "get": {
+        "tags": [
+          "Token"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "bearer": {
+                "examples": {
+                  "token": {
+                    "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJib2R5Ijoic2VjcmV0IiwiaWF0IjoxNjcwMzM2NzUwfQ.9tujIwnVun4pydMDwzDbKkBr9JuOc9LZBcz_iAVH_eU"
+                  }
+                }
+              }
+            },
+            "description": "Server returns a jwt `token`"
+          }
+        },
+        "summary": "Get generated jwt `token`"
+      }
     }
   },
   "components": {
