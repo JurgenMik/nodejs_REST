@@ -4,7 +4,8 @@ const fs = require('fs');
 const readline = require('readline');
 const jwt = require('jsonwebtoken');
 
-const usersController = require('../controllers/users');
+//const usersController = require('../controllers/users');
+const prismaUsersController = require('../controllers/users.prisma');
 dotenv.config();
 
 const router = express.Router();
@@ -36,10 +37,10 @@ router.get('/logs', async (req, res) => {
     return res.send(lines);
 })
 
-router.get('/users', usersController.getAllUsers);
-router.post('/users', [isAuthenticated, log], usersController.createUser);
-router.put('/users/:id', [isAuthenticated, log], usersController.updateUser);
-router.delete('/users/:id', [isAuthenticated, log], usersController.deleteUser);
+router.get('/users', prismaUsersController.getAllUsers);
+router.post('/users', [isAuthenticated, log], prismaUsersController.createUser);
+router.put('/users/:id', [isAuthenticated, log], prismaUsersController.updateUser);
+router.delete('/users/:id', [isAuthenticated, log], prismaUsersController.deleteUser);
 
 function isAuthenticated(req, res, next) {
     if (typeof req.headers.authorization !== "undefined") {
