@@ -31,7 +31,8 @@ router.get('/logs', async (req, res) => {
             timestamp: fields[0],
             originalUrl: fields[1],
             method: fields[2],
-            clientId: fields[3]
+            clientId: fields[3],
+            data: fields[4]
         });
     }
     return res.send(lines);
@@ -62,10 +63,12 @@ function isAuthenticated(req, res, next) {
 function log(req, res, next) {
    const timestamp = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 
+   const data = JSON.stringify(req.body).replace(/[{",}]/g, " ");
+
    token = req.headers.authorization;
    let [header, payload, signature] = token.split(".");
 
-   fs.appendFile('log.txt', timestamp + ',' + req.originalUrl + ',' + req.method + ',' + signature + ' \r\n', function(err) {
+   fs.appendFile('log.txt', timestamp + ',' + req.originalUrl + ',' + req.method + ',' + signature + ',' + data + ' \r\n', function(err) {
        if (err) throw err;
    });
    next();
