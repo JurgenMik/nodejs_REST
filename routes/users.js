@@ -32,7 +32,7 @@ router.get('/logs', async (req, res) => {
             originalUrl: fields[1],
             method: fields[2],
             clientId: fields[3],
-            data: fields[4]
+            dataDiff: fields[4]
         });
     }
     return res.send(lines);
@@ -60,18 +60,42 @@ function isAuthenticated(req, res, next) {
     }
 }
 
-function log(req, res, next) {
+async function log(req, res, next) {
    const timestamp = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
-
-   const data = JSON.stringify(req.body).replace(/[{",}]/g, " ");
 
    token = req.headers.authorization;
    let [header, payload, signature] = token.split(".");
 
-   fs.appendFile('log.txt', timestamp + ',' + req.originalUrl + ',' + req.method + ',' + signature + ',' + data + ' \r\n', function(err) {
+   let dataDiff;
+   if (req.method === 'PUT') { dataDiff = JSON.stringify(diff(req.body, (await prismaUsersController.getOneUser(req.params.id, res)))).replace(/[{\"\",}]+/g, " "); }
+
+   fs.appendFile('log.txt', timestamp + ',' + req.originalUrl + ',' + req.method + ',' + signature + ',' + dataDiff + ' \r\n', function(err) {
        if (err) throw err;
    });
    next();
+}
+
+function diff(stateOne, stateTwo) {
+    function getUniqueKeys(stateOne, stateTwo) {
+        let keys = Object.keys(stateOne).concat(Object.keys(stateTwo));
+        return keys.filter(function (item, pos) {
+            return keys.indexOf(item) === pos;
+        });
+    }
+
+    let initial = {state: "Old"};
+    let result = {state: "New"};
+
+    let reference = [];
+    for (let k of getUniqueKeys(stateOne, stateTwo)) {
+        if (stateOne[k] !== stateTwo[k]) {
+            initial[k] = stateTwo[k]
+            result[k] = stateOne[k]
+        }
+    }
+    reference.push(initial, result);
+
+    return reference;
 }
 
 module.exports = router;

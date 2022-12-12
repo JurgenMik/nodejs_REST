@@ -87,6 +87,24 @@ exports.deleteUser = async (req, res) => {
     }
 }
 
+exports.getOneUser = async (id, res) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: id,
+            },
+        })
+        return {
+            email: user.email,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            avatar: user.avatar
+        }
+    } catch (error) {
+        return res.status(404).json({message: 'Invalid Id'})
+    }
+}
+
 async function authorize(req) {
     const clientToken = req.headers.authorization.split(" ")[1];
 
