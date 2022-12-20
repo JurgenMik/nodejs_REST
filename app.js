@@ -47,3 +47,4 @@ server.listen(3002, () => {
 });
 
 module.exports = { io }
+module.exports = server;
