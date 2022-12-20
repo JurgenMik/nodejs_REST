@@ -156,6 +156,20 @@
               }
             },
             "description": "Missing field in request body"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "error": {
+                    "value": {
+                      "error": "Please include a token in request header"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Unauthorized - missing `token`"
           }
         },
         "security": [
@@ -241,6 +255,23 @@
               }
             },
             "description": "Missing correct _id in the URL path"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "error": {
+                    "value": {
+                      "error": "Please include a token in request header"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "unauthorized - missing `token`"
+          },
+          "403": {
+            "description": "Prohibited"
           }
         },
         "security": [
@@ -272,6 +303,23 @@
           },
           "400": {
             "description": "Missing correct _id in the URL path "
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "error": {
+                    "value": {
+                      "error": "Please include a token in request header"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "unauthorized - missing `token`"
+          },
+          "403": {
+            "description": "Prohibited"
           }
         },
         "security": [
