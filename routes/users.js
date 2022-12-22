@@ -32,7 +32,8 @@ router.get('/logs', async (req, res) => {
             originalUrl: fields[1],
             method: fields[2],
             clientId: fields[3],
-            dataDiff: fields[4]
+            dataDiff: fields[4],
+            data: fields[5]
         });
     }
     return res.send(lines);
@@ -67,9 +68,12 @@ async function log(req, res, next) {
    let [header, payload, signature] = token.split(".");
 
    let dataDiff;
-   if (req.method === 'PUT') { dataDiff = JSON.stringify(diff(req.body, (await prismaUsersController.getOneUser(req.params.id, res)))).replace(/[{\"\",}]+/g, " "); }
+   let body;
 
-   fs.appendFile('log.txt', timestamp + ',' + req.originalUrl + ',' + req.method + ',' + signature + ',' + dataDiff + ' \r\n', function(err) {
+   if (req.method === 'PUT') { dataDiff = JSON.stringify(diff(req.body, (await prismaUsersController.getOneUser(req.params.id, res)))).replace(/[{\"\",}]+/g, " "); }
+   if (req.method === 'POST') { body = JSON.stringify(req.body).replace(/[{\"\",}]+/g, " ") }
+
+   fs.appendFile('log.txt', timestamp + ',' + req.originalUrl + ',' + req.method + ',' + signature + ',' + dataDiff + ',' + body + ' \r\n', function(err) {
        if (err) throw err;
    });
    next();

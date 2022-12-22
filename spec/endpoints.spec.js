@@ -1,10 +1,11 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../app');
-const {USERINFO_CHARS} = require("prisma/prisma-client/runtime");
 
 const should = chai.should();
 chai.use(chaiHttp);
+chai.use(require('chai-things'));
+chai.use(require('chai-like'));
 
 let id;
 let token;
@@ -21,28 +22,8 @@ describe('API endpoint testing', () => {
                 });
         })
     })
-    describe('/api/logs', () => {
-        it('should get all server logs', () => {
-            chai.request(server)
-                .get('/api/logs')
-                .end((err, res) => {
-                   res.should.have.status(200);
-                   res.body.should.be.a('array');
-                   //res.body.should.have.lengthOf(188);
-                });
-        })
-    })
+
     describe('/api/users', () => {
-        it('should get all the users', () => {
-            chai.request(server)
-                .get('/api/users')
-                .end((err, res) => {
-                    res.should.have.status(200);
-                    res.body.should.be.a('object');
-                    res.body.should.have.property('users');
-                    res.body.users.should.be.a('array') //.with.lengthOf(16);
-                });
-        })
         it ('should successfully create a new user', (done) => {
             chai.request(server)
                 .post('/api/users')
@@ -50,10 +31,10 @@ describe('API endpoint testing', () => {
                 .set({ "Authorization": `Bearer ${token}`})
                 .end((err, res) => {
                     res.should.have.status(201);
-                    res.body.should.be.a('object');
-                    res.body.user.should.have.property('id');
+                    res.body.should.be.an('object');
                     res.body.should.have.property('createdAt');
                     id = res.body.user.id;
+                    res.body.user.should.deep.include({id, email: 'jurgen@gmail.com', first_name: 'Deimpz', last_name: 'Uumpa', avatar: 'img/src/profile/uumpa.png', token: token });
                     done()
                 });
         })
@@ -64,7 +45,7 @@ describe('API endpoint testing', () => {
                 .set({ "Authorization": `Bearer ${null}`})
                 .end((err, res) => {
                     res.should.have.status(401);
-                    res.body.should.be.a('object');
+                    res.body.should.be.an('object');
                     res.body.should.have.property('error');
                 });
         })
@@ -79,15 +60,32 @@ describe('API endpoint testing', () => {
                     res.body.message.should.be.a('string');
                 });
         })
-        it('should successfully edit user information', () => {
+
+        it('should get all the users', (done) => {
             chai.request(server)
-                .put('/api/users/639764889215a11948c07422')
-                .send({email: 'jurgen@gmail.com', first_name: 'Deimpz', last_name: 'Uumpa', avatar: 'img/src/profile/uumpa.png'})
-                .set({ "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJib2R5Ijoic2VjcmV0IiwiaWF0IjoxNjcwODY0MTQxfQ.DLzux47bTO0EBrJawmtJ51JMTUh827UEVMWoyyT2wHs`})
+                .get('/api/users')
                 .end((err, res) => {
                     res.should.have.status(200);
-                    res.body.should.be.a('object');
+                    res.body.should.be.an('object');
+                    res.body.users.should.be.an('array');
+                    res.body.users.should.deep.include({id: id, email: 'jurgen@gmail.com', first_name: 'Deimpz', last_name: 'Uumpa', avatar: 'img/src/profile/uumpa.png', token: token});
+                    res.body.users.should.all.have.property('id');
+                    res.body.users.should.all.have.property('token');
+                    done();
+                });
+        })
+
+        it('should successfully edit user information', (done) => {
+            chai.request(server)
+                .put(`/api/users/${id}`)
+                .send({email: 'jurgen@gmail.com', first_name: 'Deimpz', last_name: 'UumpaLumpa', avatar: 'img/src/profile/uumpa.png'})
+                .set({ "Authorization": `Bearer ${token}`})
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.user.should.be.an('object');
+                    res.body.user.should.deep.include({id, email: 'jurgen@gmail.com', first_name: 'Deimpz', last_name: 'UumpaLumpa', avatar: 'img/src/profile/uumpa.png', token: token });
                     res.body.should.have.property('updatedAt');
+                    done();
             });
         })
         it('should return a bad request response', () => {
@@ -97,7 +95,7 @@ describe('API endpoint testing', () => {
                 .set({ "Authorization": `Bearer ${token}`})
                 .end((err, res) => {
                     res.should.have.status(404);
-                    res.body.should.be.a('object');
+                    res.body.should.be.an('object');
                     res.body.should.have.a.property('message');
                 });
         })
@@ -108,7 +106,7 @@ describe('API endpoint testing', () => {
                 .set({ "Authorization": `Bearer ${null}`})
                 .end((err, res) => {
                     res.should.have.status(401);
-                    res.body.should.be.a('object');
+                    res.body.should.be.an('object');
                     res.body.should.have.property('error');
                 });
         })
@@ -121,6 +119,7 @@ describe('API endpoint testing', () => {
                     res.should.have.status(403);
                 });
         })
+
         it ('should successfully delete a user', () => {
             chai.request(server)
                 .delete(`/api/users/${id}`)
@@ -143,7 +142,7 @@ describe('API endpoint testing', () => {
                 .set({ "Authorization": `Bearer ${null}`})
                 .end((err, res) => {
                     res.should.have.status(401);
-                    res.body.should.be.a('object');
+                    res.body.should.be.an('object');
                     res.body.should.have.property('error');
                 });
         })
@@ -156,5 +155,30 @@ describe('API endpoint testing', () => {
                 });
         })
     })
+
+    describe('/api/logs', () => {
+        let object1;
+        let object2;
+        let object3;
+        it('should get all server logs', (done) => {
+            chai.request(server)
+                .get('/api/logs')
+                .end((err, res) => {
+                    let [header, payload, signature] = token.split(".");
+                    res.should.have.status(200);
+                    res.body.should.be.an('array');
+                    object1 = res.body.find(obj => obj.clientId === signature && obj.method === 'PUT');
+                    object2 = res.body.find(obj => obj.clientId === signature && obj.method === 'DELETE');
+                    object3 = res.body.find(obj => obj.clientId === signature && obj.method === 'POST');
+                    object1.should.have.property('originalUrl', `/api/users/${id}`);
+                    object1.should.have.property('dataDiff','[ state : Old last_name : Uumpa state : New last_name : UumpaLumpa ]');
+                    object2.should.have.property('originalUrl', `/api/users/${id}`);
+                    object3.data.should.include(` email : jurgen@gmail.com first_name : Deimpz last_name : Uumpa avatar : img/src/profile/uumpa.png token : ${token}`);
+                    //object3.should.have.property('data', `email : jurgen@gmail.com first_name : Deimpz last_name : Uumpa avatar : img/src/profile/uumpa.png token : ${token}`)
+                    done();
+                });
+        })
+    })
+
 })
 
