@@ -68,10 +68,13 @@ describe('API endpoint testing', () => {
                     res.should.have.status(200);
                     res.body.should.be.an('object');
                     res.body.users.should.be.an('array');
-                    res.body.users.should.not.deep.include({email: 'jurgen@gmail.com', last_name: 'Uumpa', avatar: 'img/src/profile/uumpa.png', token: token});
                     res.body.users.should.deep.include({id: id, email: 'jurgen@gmail.com', first_name: 'Deimpz', last_name: 'Uumpa', avatar: 'img/src/profile/uumpa.png', token: token});
                     res.body.users.should.all.have.property('id');
                     res.body.users.should.all.have.property('token');
+                    res.body.users.should.all.have.property('first_name');
+                    res.body.users.should.all.have.property('last_name');
+                    res.body.users.should.all.have.property('email');
+                    res.body.users.should.all.have.property('avatar');
                     done();
                 });
         })
