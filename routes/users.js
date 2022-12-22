@@ -87,8 +87,8 @@ function diff(stateOne, stateTwo) {
         });
     }
 
-    let initial = {state: "Old"};
-    let result = {state: "New"};
+    let initial = {};
+    let result = {};
 
     let reference = [];
     for (let k of getUniqueKeys(stateOne, stateTwo)) {

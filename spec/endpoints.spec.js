@@ -68,6 +68,7 @@ describe('API endpoint testing', () => {
                     res.should.have.status(200);
                     res.body.should.be.an('object');
                     res.body.users.should.be.an('array');
+                    res.body.users.should.not.deep.include({email: 'jurgen@gmail.com', last_name: 'Uumpa', avatar: 'img/src/profile/uumpa.png', token: token});
                     res.body.users.should.deep.include({id: id, email: 'jurgen@gmail.com', first_name: 'Deimpz', last_name: 'Uumpa', avatar: 'img/src/profile/uumpa.png', token: token});
                     res.body.users.should.all.have.property('id');
                     res.body.users.should.all.have.property('token');
@@ -91,7 +92,7 @@ describe('API endpoint testing', () => {
         it('should return a bad request response', () => {
             chai.request(server)
                 .put('/api/users/63976488')
-                .send({email: 'jurgen@gmail.com', first_name: 'Deimpz', last_name: 'Uumpa', avatar: 'img/src/profile/uumpa.png'})
+                .send({email: 'jurgen@gmail.com', first_name: 'Deimpz', last_name: 'UumpaLumpa', avatar: 'img/src/profile/uumpa.png'})
                 .set({ "Authorization": `Bearer ${token}`})
                 .end((err, res) => {
                     res.should.have.status(404);
@@ -102,7 +103,7 @@ describe('API endpoint testing', () => {
         it('should return an unauthorized message', () => {
             chai.request(server)
                 .put(`/api/users/${id}`)
-                .send({email: 'jurgen@gmail.com', first_name: 'Deimpz', last_name: 'Uumpa', avatar: 'img/src/profile/uumpa.png'})
+                .send({email: 'jurgen@gmail.com', first_name: 'Deimpz', last_name: 'UumpaLumpa', avatar: 'img/src/profile/uumpa.png'})
                 .set({ "Authorization": `Bearer ${null}`})
                 .end((err, res) => {
                     res.should.have.status(401);
@@ -113,7 +114,7 @@ describe('API endpoint testing', () => {
         it('should prohibit user from being edited', () => {
             chai.request(server)
                 .put(`/api/users/${id}`)
-                .send({email: 'jurgen@gmail.com', first_name: 'Deimpz', last_name: 'Uumpa', avatar: 'img/src/profile/uumpa.png'})
+                .send({email: 'jurgen@gmail.com', first_name: 'Deimpz', last_name: 'UumpaLumpa', avatar: 'img/src/profile/uumpa.png'})
                 .set({ "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJib2R5Ijoic2VjcmV0IiwiaWF0IjoxNjcwODY0MTQxfQ.DLzux47bTO0EBrJawmtJ51JMTUh827UEVMWoyyT2wHs`})
                 .end((err, res) => {
                     res.should.have.status(403);
@@ -171,10 +172,9 @@ describe('API endpoint testing', () => {
                     object2 = res.body.find(obj => obj.clientId === signature && obj.method === 'DELETE');
                     object3 = res.body.find(obj => obj.clientId === signature && obj.method === 'POST');
                     object1.should.have.property('originalUrl', `/api/users/${id}`);
-                    object1.should.have.property('dataDiff','[ state : Old last_name : Uumpa state : New last_name : UumpaLumpa ]');
+                    object1.should.have.property('dataDiff','[ last_name : Uumpa last_name : UumpaLumpa ]');
                     object2.should.have.property('originalUrl', `/api/users/${id}`);
                     object3.data.should.include(` email : jurgen@gmail.com first_name : Deimpz last_name : Uumpa avatar : img/src/profile/uumpa.png token : ${token}`);
-                    //object3.should.have.property('data', `email : jurgen@gmail.com first_name : Deimpz last_name : Uumpa avatar : img/src/profile/uumpa.png token : ${token}`)
                     done();
                 });
         })
