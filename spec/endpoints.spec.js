@@ -118,7 +118,7 @@ describe('API endpoint testing', () => {
             chai.request(server)
                 .put(`/api/users/${id}`)
                 .send({email: 'jurgen@gmail.com', first_name: 'Deimpz', last_name: 'UumpaLumpa', avatar: 'img/src/profile/uumpa.png'})
-                .set({ "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJib2R5Ijoic2VjcmV0IiwiaWF0IjoxNjcwODY0MTQxfQ.DLzux47bTO0EBrJawmtJ51JMTUh827UEVMWoyyT2wHs`})
+                .set({ "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJib2R5Ijoic2VjcmV0IiwiaWF0IjoxNjczMTMzMjY5fQ.Ol6hX6-cnuwZCTQTKmJgD4sZ_v_hS8ad5otu0Ot96sY`})
                 .end((err, res) => {
                     res.should.have.status(403);
                 });
